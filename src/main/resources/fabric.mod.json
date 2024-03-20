@@ -16,6 +16,9 @@
   "entrypoints": {
 	"main": [
 	  "repulica.resetting.Resetting"
+	],
+	"client": [
+	  "repulica.resetting.ResettingClient"
 	]
   },
   "mixins": [

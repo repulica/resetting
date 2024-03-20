@@ -6,29 +6,30 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.Item;
+import net.minecraft.network.packet.s2c.common.CustomPayloadS2CPacket;
 import net.minecraft.registry.Registries;
 import net.minecraft.resource.JsonDataLoader;
 import net.minecraft.resource.ResourceManager;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
-import net.minecraft.util.Pair;
 import net.minecraft.util.profiler.Profiler;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 public class ComponentManager extends JsonDataLoader implements IdentifiableResourceReloadListener {
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 	public static final ComponentManager INSTANCE = new ComponentManager();
 
-	private final Map<Item, ComponentMap> components = new HashMap<>();
+	private Map<Item, ComponentMap> components = new HashMap<>();
 
 	public ComponentManager() {
 		super(GSON, "components");
@@ -37,6 +38,7 @@ public class ComponentManager extends JsonDataLoader implements IdentifiableReso
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Override
 	protected void apply(Map<Identifier, JsonElement> prepared, ResourceManager manager, Profiler profiler) {
+		components.clear();
 		for (Identifier id : prepared.keySet()) {
 			Item item = Registries.ITEM.get(id);
 			JsonObject json = prepared.get(id).getAsJsonObject();
@@ -70,6 +72,14 @@ public class ComponentManager extends JsonDataLoader implements IdentifiableReso
 	@Nullable
 	public ComponentMap getComponents(Item item) {
 		return components.get(item);
+	}
+
+	public void syncPacket(ServerPlayerEntity player, boolean joined) {
+		player.networkHandler.sendPacket(new CustomPayloadS2CPacket(new ComponentOverrides(components)));
+	}
+
+	public void readPacket(ComponentOverrides overrides, ClientPlayNetworking.Context context) {
+		components = overrides.components();
 	}
 
 	@Override
