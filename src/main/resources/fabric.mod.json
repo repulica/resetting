@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "resetting",
+  "version": "${version}",
+  "name": "resetting",
+  "description": "data-driven default item stack components",
+  "authors": [
+	"repulica"
+  ],
+  "contact": {
+	"sources": "https://github.com/repulica/resetting"
+  },
+  "license": "MPL-2.0",
+  "icon": "assets/resetting/icon.png",
+  "environment": "*",
+  "entrypoints": {
+	"main": [
+	  "repulica.resetting.Resetting"
+	]
+  },
+  "mixins": [
+	"resetting.mixins.json"
+  ],
+  "depends": {
+	"minecraft": ">1.20.4",
+	"fabric-api": "*"
+  }
+}
