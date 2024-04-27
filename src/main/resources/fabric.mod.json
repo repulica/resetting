@@ -5,27 +5,27 @@
   "name": "resetting",
   "description": "data-driven default item stack components",
   "authors": [
-	"repulica"
+		"repulica"
   ],
   "contact": {
-	"sources": "https://github.com/repulica/resetting"
+		"sources": "https://github.com/repulica/resetting"
   },
   "license": "MPL-2.0",
   "icon": "assets/resetting/icon.png",
   "environment": "*",
   "entrypoints": {
-	"main": [
-	  "repulica.resetting.Resetting"
-	],
-	"client": [
-	  "repulica.resetting.ResettingClient"
-	]
+		"main": [
+			"repulica.resetting.Resetting"
+		],
+		"client": [
+			"repulica.resetting.ResettingClient"
+		]
   },
   "mixins": [
-	"resetting.mixins.json"
+		"resetting.mixins.json"
   ],
   "depends": {
-	"minecraft": ">1.20.4",
+	"minecraft": ">=1.20.5",
 	"fabric-api": "*"
   }
 }
